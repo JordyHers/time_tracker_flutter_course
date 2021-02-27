@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_button.dart';
-import 'package:time_tracker_flutter_course/common_widgets/custom_raised_button.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/social_sign_in_button.dart';
 
 class SignInPage extends StatelessWidget {
   @override
@@ -30,32 +30,16 @@ class SignInPage extends StatelessWidget {
             style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 48.0),
-          CustomRaisedButton(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset('images/google-logo.png'),
-                Text('Sign in With Google'),
-                Opacity(
-                  opacity: 0.0,
-                  child: Image.asset('images/google-logo.png'),
-                ),
-              ],
-            ),
-            color: Colors.white,
-            onPressed: () {},
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          SignInButton(
+          SocialSignInButton(
+            assetName:'images/google-logo.png',
             text: 'Sign in With Google',
             textColor: Colors.black87,
             color: Colors.white,
             onPressed: () {},
           ),
           SizedBox(height: 8.0),
-          SignInButton(
+          SocialSignInButton(
+            assetName: 'images/facebook-logo.png',
             text: 'Sign in With Facebook',
             textColor: Colors.white,
             color: Color(0xFF334D92),

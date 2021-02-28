@@ -27,6 +27,7 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     ///First we need to initiate the current state of the user
     _updateUser(widget.auth.currentUser);
+
   }
   void _updateUser(User user){
    setState(() {

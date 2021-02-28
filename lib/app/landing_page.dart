@@ -6,46 +6,37 @@ import 'home_page.dart';
 
 
 
-class LandingPage extends StatefulWidget {
+class LandingPage extends StatelessWidget {
   const LandingPage({Key key,@required this.auth}) : super(key: key);
   final AuthBase  auth;
 
-  ///In order to pass this value auth declared in the [STATE]
+  ///In order to pass this value auth declared in the [STATE] for Stateful classes
   ///to the actual LandingPage widget
-  ///we need to use the key word [widget]
+  ///we need to use the key word [widget.auth]
 
-  @override
-  _LandingPageState createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-  User _user;
-
-
-  @override
-  void initState() {
-    super.initState();
-    ///First we need to initiate the current state of the user
-    _updateUser(widget.auth.currentUser);
-
-  }
-  void _updateUser(User user){
-   setState(() {
-     _user = user ;
-   });
-  }
 
   @override
   Widget build(BuildContext context) {
-    if(_user == null){
-      return SignInPage(
-        auth: widget.auth,
-        onSignIn: _updateUser,
-      );
-    }
-    return HomePage(
-      auth: widget.auth,
-      onSignOut:()=>_updateUser(null),
-    );
+    return StreamBuilder<User>(
+      ///auth.authStateChanges is the stream  declared in the [auth.dart] class
+        stream: auth.authStateChanges(),
+        builder: (context,snapshot){
+          if (snapshot.connectionState == ConnectionState.active){
+            final user = snapshot.data;
+            if(user == null){
+              return SignInPage(
+                auth: auth,
+              );
+            }
+            return HomePage(
+              auth: auth,
+            );
+          }
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator(),),
+          );
+        }
+        );
+
   }
 }

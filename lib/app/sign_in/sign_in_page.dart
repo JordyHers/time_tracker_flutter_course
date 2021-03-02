@@ -42,7 +42,7 @@ class SignInPage extends StatelessWidget {
   ///from bottom to to if false or slide on the side (ONLY FOR IOS)
   Future<void> _signInWithEmail(BuildContext context) async {
     Navigator.of(context).push(MaterialPageRoute<void>(
-        fullscreenDialog: true, builder: (context) => EmailSignInPage()));
+        fullscreenDialog: true, builder: (context) => EmailSignInPage(auth: auth,)));
   }
 
   @override

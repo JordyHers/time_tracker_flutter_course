@@ -5,13 +5,22 @@ import 'package:google_sign_in/google_sign_in.dart';
 abstract class AuthBase {
   /// These methods don't have implementations
   User get currentUser;
-  Future<User> signInAnonymously();
-  Future<void> signOut();
-  Stream<User> authStateChanges();
-  Future<User> signInWithGoogle();
-  Future <User> signInWithFacebook();
-}
 
+  Future<User> signInAnonymously();
+
+  Future<void> signOut();
+
+  Stream<User> authStateChanges();
+
+  Future<User> signInWithGoogle();
+
+  Future <User> signInWithFacebook();
+
+  Future<User> createUserWithEmailAndPassword(String email, String password,
+      String name, String surname);
+
+  Future<User> signInWithEmailAndPassword(String email, String password);
+}
 
 
 class Auth implements AuthBase {
@@ -35,6 +44,25 @@ class Auth implements AuthBase {
     return userCredential.user;
   }
 
+  ///Sign in with Email and Password
+  @override
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      EmailAuthProvider.credential(email: email, password: password),
+    );
+    return userCredential.user;
+  }
+
+
+  ///Register with email and passwords
+  @override
+  Future<User> createUserWithEmailAndPassword(String email, String password,
+      String name, String surname) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    return userCredential.user;
+  }
+
   ///Sign In with Google Method
   @override
   Future<User> signInWithGoogle() async {
@@ -49,16 +77,16 @@ class Auth implements AuthBase {
               idToken: googleAuth.idToken, accessToken: googleAuth.accessToken),
         );
         return userCredential.user;
-      } else{
+      } else {
         throw FirebaseAuthException(
-             code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
-            message: 'Missing Google Id Token',
-           );
+          code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
+          message: 'Missing Google Id Token',
+        );
       }
     } else {
       throw FirebaseAuthException(
         code: 'ERROR_ABORTED_BY_USER',
-          message: 'Sign in aborted by user',
+        message: 'Sign in aborted by user',
       );
     }
   }
@@ -76,9 +104,9 @@ class Auth implements AuthBase {
       FacebookPermission.email,
 
     ]);
-    switch(response.status){
+    switch (response.status) {
       case FacebookLoginStatus.success:
-        final accessToken  = response.accessToken;
+        final accessToken = response.accessToken;
         final userCredential = await _firebaseAuth.signInWithCredential(
           FacebookAuthProvider.credential(accessToken.token),
         );
@@ -97,10 +125,8 @@ class Auth implements AuthBase {
         );
       default:
         throw UnimplementedError();
-
     }
   }
-
 
 
   ///Sign Out Method from Firebase and Google
@@ -111,7 +137,5 @@ class Auth implements AuthBase {
     await facebookLogin.logOut();
     await googleSignIn.signOut();
     await _firebaseAuth.signOut();
-
-
   }
 }

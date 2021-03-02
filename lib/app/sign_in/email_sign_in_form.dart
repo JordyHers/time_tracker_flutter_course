@@ -74,9 +74,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   ///This is the list of widgets that are used to construct the Sign in form view
   List<Widget> _buildChildren() {
-    _formType == EmailSignInFormType.register
-        ? FocusScope.of(context).requestFocus(_nameFocusNode)
-        : FocusScope.of(context).requestFocus(_emailFocusNode);
+    if(_formType == EmailSignInFormType.register){
+         FocusScope.of(context).requestFocus(_nameFocusNode);}
+
     final primaryText = _formType == EmailSignInFormType.signIn
         ? 'Sign in '
         : ' Create an account ';

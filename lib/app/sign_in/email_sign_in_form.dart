@@ -1,19 +1,17 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
-///Declaration of enum
-///
+
+
 /// This enum takes care of the different states of the sign in form
 enum EmailSignInFormType { signIn, register }
 
 class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
-  EmailSignInForm({Key key, @required this.auth}) : super(key: key);
-  final AuthBase auth;
 
   @override
   _EmailSignInFormState createState() => _EmailSignInFormState();
@@ -56,10 +54,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _isLoading = true;
     });
     try {
+      final auth = Provider.of<AuthBase>(context, listen: false);
       if (_formType == EmailSignInFormType.signIn) {
-        await widget.auth.signInWithEmailAndPassword(_email, _password);
+        await auth.signInWithEmailAndPassword(_email, _password);
       } else {
-        await widget.auth
+        await auth
             .signUpUserWithEmailAndPassword(_email, _password, _name, _surname);
       }
       Navigator.of(context).pop();

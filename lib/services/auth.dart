@@ -50,7 +50,7 @@ class Auth implements AuthBase {
     final userCredential = await _firebaseAuth.signInWithCredential(
       EmailAuthProvider.credential(email: email, password: password),
     );
-    print('Welcome back dear user _____=>   ${email}');
+    print('Welcome back dear user _____=>  $email ');
     return userCredential.user;
   }
 
@@ -61,8 +61,7 @@ class Auth implements AuthBase {
       String name, String surname) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
-
-    print('Sign Up user complete  Name : ${name}');
+    print('Sign Up user complete  Name : $name');
     return userCredential.user;
   }
 

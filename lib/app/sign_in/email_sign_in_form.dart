@@ -47,6 +47,24 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   /// when [Need an account ? register] is pressed.
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
 
+  ///void Dispose Method
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _nameController.dispose();
+    _surnameController.dispose();
+
+    super.dispose();
+
+  }
+
   /// Submit function is called when the button is pressed
   void _submit() async {
     print('Submitted called');

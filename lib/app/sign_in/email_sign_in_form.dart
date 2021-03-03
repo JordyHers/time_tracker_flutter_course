@@ -37,6 +37,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   String get _password => _passwordController.text;
 
   bool _submitted = false;
+  bool _isLoading = false;
 
 
 
@@ -49,19 +50,25 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   /// Submit function is called when the button is pressed
   void _submit() async {
+    print('Submitted called');
     setState(() {
       _submitted = true;
+      _isLoading =true;
     });
     try {
+
       if (_formType == EmailSignInFormType.signIn) {
         await widget.auth.signInWithEmailAndPassword(_email, _password);
       } else {
-        await widget.auth
-            .signUpUserWithEmailAndPassword(_email, _password, _name, _surname);
+        await widget.auth.signUpUserWithEmailAndPassword(_email, _password, _name, _surname);
       }
       Navigator.of(context).pop();
     } catch (e) {
       print(e.toString());
+    } finally{
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -72,6 +79,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   ///This function switches the state of the button
   void _toggleFormType() {
     setState(() {
+      _submitted = false;
       _formType = _formType == EmailSignInFormType.signIn
           ? EmailSignInFormType.register
           : EmailSignInFormType.signIn;
@@ -105,7 +113,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         : 'Have an account? Sign in';
 
     bool submitSignInEnabled = widget.emailValidator.isValid(_email) &&
-        widget.passwordValidator.isValid(_password);
+        widget.passwordValidator.isValid(_password) && !_isLoading;
 
     bool submitRegisterEnabled = widget.emailValidator.isValid(_email) &&
         widget.passwordValidator.isValid(_password) &&
@@ -113,7 +121,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         widget.surnameValidator.isValid(_surname);
 
     bool showErrorTextName = _submitted && ! widget.nameValidator.isValid(_name);
-    bool showErrorTextSurname = _submitted && ! widget.surnameValidator.isValid(_surname);
+    bool showErrorTextSurname = _submitted && ! widget.surnameValidator.isValid(_surname) &&
+    !_isLoading;
 
     return [
       ///These codes will display the Name and Surname fields
@@ -129,6 +138,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               decoration: InputDecoration(
                 labelText: 'Name',
                 errorText: showErrorTextName ? widget.inValidNameErrorText : null,
+                enabled: _isLoading ==false,
               ))
           : Opacity(opacity: 0),
       _formType == EmailSignInFormType.register
@@ -141,6 +151,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               decoration: InputDecoration(
                 labelText: 'Surname',
                 errorText: showErrorTextSurname ? widget.inValidSurnameErrorText : null,
+                enabled: _isLoading == false,
               ))
           : Opacity(opacity: 0),
       _buildEmailTextField(),
@@ -154,7 +165,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       ),
       SizedBox(height: 8.0),
       FlatButton(
-        onPressed: _toggleFormType,
+        onPressed: !_isLoading ? _toggleFormType : null,
         child: Text(secondaryText),
       ),
     ];
@@ -173,6 +184,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         labelText: 'Email',
         hintText: 'test@test.com',
         errorText: showErrorTextEmail ? widget.inValidEmailErrorText : null,
+        enabled: _isLoading ==false
       ),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
@@ -190,6 +202,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       decoration: InputDecoration(
         labelText: 'Password',
         errorText: showErrorTextPassword ? widget.inValidPasswordErrorText :null,
+          enabled: _isLoading ==false
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
@@ -214,7 +227,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   ///This method reloads the page
   _updateState() {
-    print('email is $_email , password : $_password}');
     setState(() {});
   }
 }

@@ -17,6 +17,7 @@ class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
 }
 
 class _EmailSignInFormState extends State<EmailSignInForm> {
+  ///--------------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -73,6 +74,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     _passwordController.clear();
   }
 
+  ///-----------------------------------------------------------------------------------------
+  ///
+  ///
+  ///
+
   ///This is the list of widgets that are used to construct the Sign in form view
   List<Widget> _buildChildren() {
     // if (_formType == EmailSignInFormType.register) {
@@ -88,13 +94,19 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
     bool submitSignInEnabled = widget.emailValidator.isValid(_email) &&
         widget.passwordValidator.isValid(_password);
-    
-    
+
     bool submitRegisterEnabled = widget.emailValidator.isValid(_email) &&
-        widget.passwordValidator.isValid(_password) && widget.nameValidator.isValid(_name) &&
-    widget.surnameValidator.isValid(_surname);
+        widget.passwordValidator.isValid(_password) &&
+        widget.nameValidator.isValid(_name) &&
+        widget.surnameValidator.isValid(_surname);
+
+    bool nameValid = widget.nameValidator.isValid(_name);
+    bool surnameValid = widget.surnameValidator.isValid(_surname);
 
     return [
+      ///These codes will display the Name and Surname fields
+      ///
+      ///when the button switches to register
       _formType == EmailSignInFormType.register
           ? TextField(
               focusNode: _nameFocusNode,
@@ -104,6 +116,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               },
               decoration: InputDecoration(
                 labelText: 'Name',
+                errorText: nameValid ? null : widget.inValidNameErrorText,
               ))
           : Opacity(opacity: 0),
       _formType == EmailSignInFormType.register
@@ -115,6 +128,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
               },
               decoration: InputDecoration(
                 labelText: 'Surname',
+                errorText: surnameValid ? null : widget.inValidSurnameErrorText,
               ))
           : Opacity(opacity: 0),
       _buildEmailTextField(),
@@ -122,7 +136,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _buildPasswordTextField(),
       SizedBox(height: 8.0),
       FormSubmitButton(
-        onPressed: submitRegisterEnabled && submitSignInEnabled ? _submit : null,
+        onPressed:
+            submitRegisterEnabled && submitSignInEnabled ? _submit : null,
         text: primaryText,
       ),
       SizedBox(height: 8.0),
@@ -133,13 +148,19 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     ];
   }
 
+  ///------------------------------ Widgets -------------------------------------------------
+  ///
+  ///
+  ///
   Widget _buildEmailTextField() {
+    bool emailValid = widget.emailValidator.isValid(_email);
     return TextField(
       focusNode: _emailFocusNode,
       controller: _emailController,
       decoration: InputDecoration(
         labelText: 'Email',
         hintText: 'test@test.com',
+        errorText: emailValid ? null : widget.inValidEmailErrorText,
       ),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
@@ -150,11 +171,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   Widget _buildPasswordTextField() {
+    bool passwordValid = widget.passwordValidator.isValid(_password);
     return TextField(
       focusNode: _passwordFocusNode,
       controller: _passwordController,
       decoration: InputDecoration(
         labelText: 'Password',
+        errorText: passwordValid ? null : widget.inValidPasswordErrorText,
       ),
       obscureText: true,
       textInputAction: TextInputAction.done,
@@ -177,6 +200,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     );
   }
 
+  ///This method reloads the page
   _updateState() {
     print('email is $_email , password : $_password}');
     setState(() {});

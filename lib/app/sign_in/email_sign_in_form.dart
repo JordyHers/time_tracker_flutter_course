@@ -58,8 +58,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
-    _nameController.dispose();
-    _surnameController.dispose();
+    _nameFocusNode.dispose();
+    _surnameFocusNode.dispose();
 
     super.dispose();
 

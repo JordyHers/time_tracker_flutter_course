@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
+import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 ///Declaration of enum
@@ -63,25 +64,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-     if (Platform.isIOS){
-       print('show Cupertino Altert Dialogs');
-     }else{
-       showDialog(
-           context: context,
-           builder: (context) {
-             return AlertDialog(
-               title: Text('Sign In failed'),
-               content: Text(e.toString()),
-               actions: [
-                 FlatButton(
-                     onPressed: () {
-                       Navigator.of(context).pop();
-                     },
-                     child: Text('OK'))
-               ],
-             );
-           });
-     }
+          showAlertDialog(context, title: 'Sign in Failed',
+          content: e.toString(),
+          defaultActionText: 'OK');
     } finally {
       setState(() {
         _isLoading = false;
@@ -141,38 +126,38 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     return [
       _formType == EmailSignInFormType.register
           ? TextField(
-              focusNode: _nameFocusNode,
-              controller: _nameController,
-              textInputAction: TextInputAction.next,
-              onEditingComplete: () {
-                if (widget.nameValidator.isValid(_name) == true) {
-                  FocusScope.of(context).requestFocus(_surnameFocusNode);
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Name',
-                errorText:
-                    showErrorTextName ? widget.inValidNameErrorText : null,
-                enabled: _isLoading == false,
-              ))
+          focusNode: _nameFocusNode,
+          controller: _nameController,
+          textInputAction: TextInputAction.next,
+          onEditingComplete: () {
+            if (widget.nameValidator.isValid(_name) == true) {
+              FocusScope.of(context).requestFocus(_surnameFocusNode);
+            }
+          },
+          decoration: InputDecoration(
+            labelText: 'Name',
+            errorText:
+            showErrorTextName ? widget.inValidNameErrorText : null,
+            enabled: _isLoading == false,
+          ))
           : Opacity(opacity: 0),
       _formType == EmailSignInFormType.register
           ? TextField(
-              focusNode: _surnameFocusNode,
-              controller: _surnameController,
-              textInputAction: TextInputAction.next,
-              onEditingComplete: () {
-                if (widget.surnameValidator.isValid(_surname) == true) {
-                  FocusScope.of(context).requestFocus(_emailFocusNode);
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Surname',
-                errorText: showErrorTextSurname
-                    ? widget.inValidSurnameErrorText
-                    : null,
-                enabled: _isLoading == false,
-              ))
+          focusNode: _surnameFocusNode,
+          controller: _surnameController,
+          textInputAction: TextInputAction.next,
+          onEditingComplete: () {
+            if (widget.surnameValidator.isValid(_surname) == true) {
+              FocusScope.of(context).requestFocus(_emailFocusNode);
+            }
+          },
+          decoration: InputDecoration(
+            labelText: 'Surname',
+            errorText: showErrorTextSurname
+                ? widget.inValidSurnameErrorText
+                : null,
+            enabled: _isLoading == false,
+          ))
           : Opacity(opacity: 0),
       _buildEmailTextField(),
       SizedBox(height: 8.0),
@@ -180,7 +165,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       SizedBox(height: 8.0),
       FormSubmitButton(
         onPressed:
-            submitRegisterEnabled || submitSignInEnabled ? _submit : null,
+        submitRegisterEnabled || submitSignInEnabled ? _submit : null,
         text: primaryText,
       ),
       SizedBox(height: 8.0),
@@ -221,7 +206,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       decoration: InputDecoration(
           labelText: 'Password',
           errorText:
-              showErrorTextPassword ? widget.inValidPasswordErrorText : null,
+          showErrorTextPassword ? widget.inValidPasswordErrorText : null,
           enabled: _isLoading == false),
       obscureText: true,
       textInputAction: TextInputAction.done,

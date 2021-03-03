@@ -17,7 +17,6 @@ class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
 }
 
 class _EmailSignInFormState extends State<EmailSignInForm> {
-  ///--------------------------------------------------------------------
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -97,11 +96,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     _passwordController.clear();
   }
 
-  ///-----------------------------------------------------------------------------------------
-  ///
-  ///
-  ///
-  ///This is the list of widgets that are used to construct the Sign in form view
   List<Widget> _buildChildren() {
     final primaryText = _formType == EmailSignInFormType.signIn
         ? 'Sign in '
@@ -125,9 +119,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         _submitted && !widget.surnameValidator.isValid(_surname) && !_isLoading;
 
     return [
-      ///These codes will display the Name and Surname fields
-      ///
-      ///when the button switches to register
       _formType == EmailSignInFormType.register
           ? TextField(
               focusNode: _nameFocusNode,
@@ -143,17 +134,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                 errorText:
                     showErrorTextName ? widget.inValidNameErrorText : null,
                 enabled: _isLoading == false,
-
               ))
           : Opacity(opacity: 0),
-
-
-      ///-------------------------------------------------------------
-           _formType == EmailSignInFormType.register
-             ? TextField(
+      _formType == EmailSignInFormType.register
+          ? TextField(
               focusNode: _surnameFocusNode,
               controller: _surnameController,
-               textInputAction: TextInputAction.next,
+              textInputAction: TextInputAction.next,
               onEditingComplete: () {
                 if (widget.surnameValidator.isValid(_surname) == true) {
                   FocusScope.of(context).requestFocus(_emailFocusNode);
@@ -185,9 +172,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   }
 
   ///------------------------------ Widgets -------------------------------------------------
-  ///
-  ///
-  ///
+
   Widget _buildEmailTextField() {
     bool showErrorTextEmail =
         _submitted && !widget.emailValidator.isValid(_email);

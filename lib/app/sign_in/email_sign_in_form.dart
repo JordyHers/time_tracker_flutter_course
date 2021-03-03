@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
@@ -7,8 +8,8 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 /// This enum takes care of the different states of the sign in form
 enum EmailSignInFormType { signIn, register }
 
-class EmailSignInForm extends StatefulWidget {
-  const EmailSignInForm({Key key, @required this.auth}) : super(key: key);
+class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
+  EmailSignInForm({Key key, @required this.auth}) : super(key: key);
   final AuthBase auth;
 
   @override
@@ -74,8 +75,9 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   ///This is the list of widgets that are used to construct the Sign in form view
   List<Widget> _buildChildren() {
-    if(_formType == EmailSignInFormType.register){
-         FocusScope.of(context).requestFocus(_nameFocusNode);}
+    // if (_formType == EmailSignInFormType.register) {
+    //   FocusScope.of(context).requestFocus(_nameFocusNode);
+    // }
 
     final primaryText = _formType == EmailSignInFormType.signIn
         ? 'Sign in '
@@ -84,7 +86,14 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         ? ' Need an account ? Register'
         : 'Have an account? Sign in';
 
-    bool submitEnabled = _email.isNotEmpty && _password.isNotEmpty;
+    bool submitSignInEnabled = widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password);
+    
+    
+    bool submitRegisterEnabled = widget.emailValidator.isValid(_email) &&
+        widget.passwordValidator.isValid(_password) && widget.nameValidator.isValid(_name) &&
+    widget.surnameValidator.isValid(_surname);
+
     return [
       _formType == EmailSignInFormType.register
           ? TextField(
@@ -113,7 +122,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _buildPasswordTextField(),
       SizedBox(height: 8.0),
       FormSubmitButton(
-        onPressed: submitEnabled ? _submit: null,
+        onPressed: submitRegisterEnabled && submitSignInEnabled ? _submit : null,
         text: primaryText,
       ),
       SizedBox(height: 8.0),
@@ -136,7 +145,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onEditingComplete: _emailEditingComplete,
-      onChanged: (email)=> _updateState(),
+      onChanged: (email) => _updateState(),
     );
   }
 
@@ -150,7 +159,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       onEditingComplete: _submit,
-      onChanged: (password)=> _updateState(),
+      onChanged: (password) => _updateState(),
     );
   }
 
@@ -168,7 +177,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
     );
   }
 
-  _updateState(){
+  _updateState() {
     print('email is $_email , password : $_password}');
     setState(() {});
   }

@@ -21,6 +21,5 @@ class EmailAndPasswordValidators{
   final String inValidPasswordErrorText =   "Password can't be empty";
   final String inValidNameErrorText =   "Name can't be empty";
   final String inValidSurnameErrorText =   "Surname can't be empty";
-
-
+  final String signInFailedText = 'Sign in Failed';
 }

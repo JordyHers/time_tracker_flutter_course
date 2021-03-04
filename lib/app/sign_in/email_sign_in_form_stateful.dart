@@ -12,13 +12,13 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 /// This enum takes care of the different states of the sign in form
 enum EmailSignInFormType { signIn, register }
 
-class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
+class EmailSignInFormStateful extends StatefulWidget with EmailAndPasswordValidators {
 
   @override
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  _EmailSignInFormStatefulState createState() => _EmailSignInFormStatefulState();
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
+class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -82,7 +82,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       }
       Navigator.of(context).pop();
     } on FirebaseAuthException catch  (e) {
-          showExceptionAlertDialog(context, title: 'Sign in Failed',
+          showExceptionAlertDialog(context, title: widget.signInFailedText,
           exception: e);
     } finally {
       setState(() {

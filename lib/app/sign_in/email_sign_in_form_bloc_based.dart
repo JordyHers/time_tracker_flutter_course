@@ -12,6 +12,8 @@ class EmailSignInFormBlocBased extends StatefulWidget {
   EmailSignInFormBlocBased({Key key, @required this.bloc}) : super(key: key);
   final EmailSignInBloc bloc;
 
+
+/// this is the 'create' logic [Consumer ] and [Provider]
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return Provider<EmailSignInBloc>(
@@ -22,7 +24,7 @@ class EmailSignInFormBlocBased extends StatefulWidget {
       dispose: (_, bloc) => bloc.dispose(),
     );
   }
-
+///_____________________________________________________________________________________
   @override
   _EmailSignInFormBlocBasedState createState() =>
       _EmailSignInFormBlocBasedState();
@@ -149,7 +151,6 @@ class _EmailSignInFormBlocBasedState extends State<EmailSignInFormBlocBased> {
   ///------------------------------ Widgets -------------------------------------------------
 
   Widget _buildEmailTextField(EmailSignInModel model) {
-
     return TextField(
       focusNode: _emailFocusNode,
       controller: _emailController,

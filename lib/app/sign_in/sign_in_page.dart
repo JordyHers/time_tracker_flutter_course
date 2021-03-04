@@ -24,7 +24,7 @@ class SignInPage extends StatelessWidget {
       ),
     );
   }
-
+///----------------------------------------------------------------------
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseAuthException &&
         exception.code == 'ERROR_ABORTED_BY_USER') {
@@ -46,7 +46,6 @@ class SignInPage extends StatelessWidget {
   ///Future void Function called to Sign In with Google
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-
       await bloc.signInWithGoogle();
     } on Exception catch (e) {
       _showSignInError(context, e);

@@ -4,7 +4,6 @@ import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_form_bloc_
 
 class EmailSignInPage extends StatelessWidget {
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -66,7 +66,7 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
   }
 
   /// Submit function is called when the button is pressed
-  void _submit() async {
+   Future <void> _submit() async {
     print('Submitted called');
     setState(() {
       _submitted = true;

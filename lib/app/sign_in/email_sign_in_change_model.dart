@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
+import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'email_sign_in_model.dart';
 
 /// This enum takes care of the different states of the sign in form
@@ -8,13 +9,17 @@ import 'email_sign_in_model.dart';
 
 class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
   EmailSignInChangeModel(
-      {this.name = '',
+      {
+      @required this.auth,
+      this.name = '',
       this.surname = '',
       this.email = '',
       this.password = '',
       this.formType = EmailSignInFormType.signIn,
       this.isLoading = false,
       this.submitted = false});
+
+  final AuthBase auth;
 
   String get primaryButtonText {
     return formType == EmailSignInFormType.signIn
@@ -64,6 +69,44 @@ class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
   EmailSignInFormType formType;
   bool isLoading;
   bool submitted;
+
+  void toggleFormType() {
+    final formType = this.formType == EmailSignInFormType.signIn
+        ? EmailSignInFormType.register
+        : EmailSignInFormType.signIn;
+    updateWith(
+        email: '',
+        password: '',
+        name: '',
+        surname: '',
+        submitted: false,
+        formType: formType,
+        isLoading: false);
+  }
+  Future<void> submit() async {
+    print('Submitted called');
+    updateWith(submitted: true, isLoading: true);
+    try {
+      if (formType == EmailSignInFormType.signIn) {
+        await auth.signInWithEmailAndPassword(email, password);
+      } else {
+        await auth.signUpUserWithEmailAndPassword(
+            email, password, name, surname);
+      }
+      // Navigator.of(context).pop();
+    } catch (e) {
+      updateWith(isLoading: false);
+      rethrow;
+    }
+  }
+
+  void updateEmail(String email) => updateWith(email: email);
+
+  void updatePassword(String password) => updateWith(password: password);
+
+  void updateName(String name) => updateWith(name: name);
+
+  void updateSurname(String surname) => updateWith(surname: surname);
 
   void updateWith({
     String name,

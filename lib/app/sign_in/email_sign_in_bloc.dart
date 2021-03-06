@@ -42,6 +42,10 @@ class EmailSignInBloc {
     final formType = _model.formType == EmailSignInFormType.signIn
         ? EmailSignInFormType.register
         : EmailSignInFormType.signIn;
+
+    ///This function clears the field everytime the user toggles between
+    ///
+    /// [Register] and [SignIn]
     updateWith(
         email: '',
         password: '',

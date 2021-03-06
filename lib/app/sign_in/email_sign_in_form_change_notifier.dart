@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_bloc.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_change_model.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
@@ -10,11 +9,11 @@ import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.d
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class EmailSignInFormChangeNotifier extends StatefulWidget {
-  EmailSignInFormChangeNotifier({Key key, @required this.model}) : super(key: key);
+  EmailSignInFormChangeNotifier({Key key, @required this.model})
+      : super(key: key);
   final EmailSignInChangeModel model;
 
-
-/// this is the 'create' logic [Consumer ] and [Provider]
+  /// this is the 'create' logic [Consumer ] and [Provider]
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return ChangeNotifierProvider<EmailSignInChangeModel>(
@@ -24,13 +23,15 @@ class EmailSignInFormChangeNotifier extends StatefulWidget {
       ),
     );
   }
-///_____________________________________________________________________________________
+
+  ///_____________________________________________________________________________________
   @override
   _EmailSignInFormChangeNotifierState createState() =>
       _EmailSignInFormChangeNotifierState();
 }
 
-class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNotifier> {
+class _EmailSignInFormChangeNotifierState
+    extends State<EmailSignInFormChangeNotifier> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -41,9 +42,7 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _surnameFocusNode = FocusNode();
 
-
-   EmailSignInChangeModel get model => widget.model;
-
+  EmailSignInChangeModel get model => widget.model;
 
   ///void Dispose Method
   @override
@@ -96,52 +95,21 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
   }
 
   List<Widget> _buildChildren() {
-
     return [
       model.formType == EmailSignInFormType.register
-          ? TextField(
-              focusNode: _nameFocusNode,
-              controller: _nameController,
-              textInputAction: TextInputAction.next,
-              onChanged: (name) => widget.model.updateName(name),
-              onEditingComplete: () {
-                if (model.nameValidator.isValid(model.name) == true) {
-                  FocusScope.of(context).requestFocus(_surnameFocusNode);
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Name',
-                errorText:
-                    model.showErrorTextName ? model.inValidNameErrorText : null,
-                enabled: model.isLoading == false,
-              ))
+          ? _buildNameField()
           : Opacity(opacity: 0),
       model.formType == EmailSignInFormType.register
-          ? TextField(
-              focusNode: _surnameFocusNode,
-              controller: _surnameController,
-              textInputAction: TextInputAction.next,
-              onChanged: (surname) => widget.model.updateSurname(surname),
-              onEditingComplete: () {
-                if (model.surnameValidator.isValid(model.surname) == true) {
-                  FocusScope.of(context).requestFocus(_emailFocusNode);
-                }
-              },
-              decoration: InputDecoration(
-                labelText: 'Surname',
-                errorText: model.showErrorTextSurname
-                    ? model.inValidSurnameErrorText
-                    : null,
-                enabled: model.isLoading == false,
-              ))
+          ? _buildSurnameField()
           : Opacity(opacity: 0),
       _buildEmailTextField(),
       SizedBox(height: 8.0),
       _buildPasswordTextField(),
       SizedBox(height: 8.0),
       FormSubmitButton(
-        onPressed:
-             model.canSubmitRegister || model.canSubmitSignIn ? () =>_submit() : null,
+        onPressed: model.canSubmitRegister || model.canSubmitSignIn
+            ? () => _submit()
+            : null,
         text: model.primaryButtonText,
       ),
       SizedBox(height: 8.0),
@@ -154,6 +122,44 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
 
   ///------------------------------ Widgets -------------------------------------------------
 
+  Widget _buildSurnameField() {
+    return TextField(
+        focusNode: _surnameFocusNode,
+        controller: _surnameController,
+        textInputAction: TextInputAction.next,
+        onChanged: (surname) => widget.model.updateSurname(surname),
+        onEditingComplete: () {
+          if (model.surnameValidator.isValid(model.surname) == true) {
+            FocusScope.of(context).requestFocus(_emailFocusNode);
+          }
+        },
+        decoration: InputDecoration(
+          labelText: 'Surname',
+          errorText:
+              model.showErrorTextSurname ? model.inValidSurnameErrorText : null,
+          enabled: model.isLoading == false,
+        ));
+  }
+
+  Widget _buildNameField() {
+    return TextField(
+        focusNode: _nameFocusNode,
+        controller: _nameController,
+        textInputAction: TextInputAction.next,
+        onChanged: (name) => widget.model.updateName(name),
+        onEditingComplete: () {
+          if (model.nameValidator.isValid(model.name) == true) {
+            FocusScope.of(context).requestFocus(_surnameFocusNode);
+          }
+        },
+        decoration: InputDecoration(
+          labelText: 'Name',
+          errorText:
+              model.showErrorTextName ? model.inValidNameErrorText : null,
+          enabled: model.isLoading == false,
+        ));
+  }
+
   Widget _buildEmailTextField() {
     return TextField(
       focusNode: _emailFocusNode,
@@ -161,42 +167,43 @@ class _EmailSignInFormChangeNotifierState extends State<EmailSignInFormChangeNot
       decoration: InputDecoration(
           labelText: 'Email',
           hintText: 'test@test.com',
-          errorText: model.showErrorTextEmail ? model.inValidEmailErrorText : null,
+          errorText:
+              model.showErrorTextEmail ? model.inValidEmailErrorText : null,
           enabled: model.isLoading == false),
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       onEditingComplete: () => _emailEditingComplete(),
-      onChanged: (email) => widget.model.updateEmail( email),
+      onChanged: (email) => widget.model.updateEmail(email),
     );
   }
 
   Widget _buildPasswordTextField() {
-
     return TextField(
       focusNode: _passwordFocusNode,
       controller: _passwordController,
       decoration: InputDecoration(
           labelText: 'Password',
-          errorText:
-              model.showErrorTexPassword? model.inValidPasswordErrorText : null,
+          errorText: model.showErrorTexPassword
+              ? model.inValidPasswordErrorText
+              : null,
           enabled: model.isLoading == false),
       obscureText: true,
       textInputAction: TextInputAction.done,
-      onEditingComplete:()=> _submit (),
+      onEditingComplete: () => _submit(),
       onChanged: (password) => widget.model.updatePassword(password),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: _buildChildren(),
-              ),
-            );
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: _buildChildren(),
+      ),
+    );
   }
 }

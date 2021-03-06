@@ -3,40 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/sign_in_page.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
-import 'home_page.dart';
+import 'package:time_tracker_flutter_course/services/database.dart';
 
-
+import 'home/jobs_page.dart';
 
 class LandingPage extends StatelessWidget {
-
   ///In order to pass this value auth declared in the [STATE] for Stateful classes
   ///to the actual LandingPage widget
   ///we need to use the key word [widget.auth]
-
 
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
     return StreamBuilder<User>(
-      ///auth.authStateChanges is the stream  declared in the [auth.dart] class
+
+        ///auth.authStateChanges is the stream  declared in the [auth.dart] class
         stream: auth.authStateChanges(),
-        builder: (context,snapshot){
-          if (snapshot.connectionState == ConnectionState.active){
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
             final user = snapshot.data;
-            if(user == null){
+            if (user == null) {
               return SignInPage.create(context);
             }
-            return HomePage();
+
+            /// Here we have added a provider [Database] as a parent of the Jobs
+            /// Page
+            return Provider<Database>(
+              create: (_) => FirestoreDatabase(uid: user.uid),
+              child: JobsPage(),
+            );
           }
           return Scaffold(
-            body: Center(child: CircularProgressIndicator(),),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
-        }
-        );
-
+        });
   }
 }
-
-
-
-

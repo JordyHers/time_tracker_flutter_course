@@ -7,7 +7,7 @@ abstract class Database {
   /// This CREATE UPDATE DELETE
   //Create a new Job / edit an existing job
   Future<void> createJob(Job job);
-  void readJobs();
+  Stream<List<Job>> JobsStream();
 }
 
 class FirestoreDatabase implements Database {
@@ -17,19 +17,28 @@ class FirestoreDatabase implements Database {
   Future<void> createJob(Job job) =>
       _setData(path: APIPath.job(uid, 'job_abc'), data: job.toMap());
 
-  void readJobs(){
+  Stream<List<Job>> JobsStream(){
     final path = APIPath.jobs(uid);
     final reference = FirebaseFirestore.instance.collection(path);
     final snapshots = reference.snapshots();
     /// Here snapshots returns a stream of documents
     ///available in the given path.[snapshot is a collection
-    snapshots.listen((snapshot) {
-
+    //snapshots.listen((snapshot) {
 
       /// Here for each document in the collection snapshot
       /// print their corresponding data [snapshot is a document]
-      snapshot.docs.forEach((snapshot) => print(snapshot.data()));
-    });
+     // snapshot.docs.forEach((snapshot) => print(snapshot.data()));
+
+    /// Here we convert a collection snapshot into a list
+    return snapshots.map((snapshot) =>  snapshot.docs.map((snapshot){
+      ///then the second snapshot = document turns them into data
+      final data = snapshot.data();
+      return data != null ? Job(
+        name: data['name'],
+        ratePerHour: data['ratePerHour'],
+      ) : null ;
+    },).toList());
+
   }
 
   Future<void> _setData({String path, Map<String, dynamic> data}) async {

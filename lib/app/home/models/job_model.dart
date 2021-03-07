@@ -13,7 +13,7 @@ class Job {
       return null;
     }
     final String name = data['name'];
-    final int ratePerHour =data['ratePerHour'];
+    final int ratePerHour = data['ratePerHour'];
     return Job(
       name: name,
       ratePerHour: ratePerHour

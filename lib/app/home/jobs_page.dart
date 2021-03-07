@@ -75,7 +75,7 @@ class JobsPage extends StatelessWidget {
       stream: database.JobsStream(),
       builder: (context, snapshot){
         if (snapshot.hasData){
-
+          ///users represents the list of documents in the collection
           final users = snapshot.data;
           final children = users.map((user) => Text(user.name)).toList();
           return ListView( children: children);

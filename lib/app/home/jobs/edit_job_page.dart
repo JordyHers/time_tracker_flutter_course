@@ -62,8 +62,11 @@ class _EditJobPageState extends State<EditJobPage> {
         /// in the stream
         /// Stream.first is a getter that get the most up-to-date value
 
-        final jobs = await widget.database.JobsStream().first;
+        final jobs = await widget.database.jobsStream().first;
         final allNames = jobs.map((job) => job.name).toList();
+        if(widget.job != null){
+          allNames.remove(widget.job.name);
+        }
         if (allNames.contains(_name)){
         await showAlertDialog(
             context,
@@ -72,10 +75,16 @@ class _EditJobPageState extends State<EditJobPage> {
             defaultActionText:'OK'
           );
         }
-        ///--------------------------
+
        else{
-          final job = Job(name: _name, ratePerHour: _ratePerHour);
-          await widget.database.createJob(job);
+
+          ///--------------------------------------------------
+          ///here we pass on the id as date of creation if uid is not available
+          ///
+          ///
+         final id = widget.job?.id ?? documentIdFromCurrentDate();
+          final job = Job(id: id, name: _name, ratePerHour: _ratePerHour);
+          await widget.database.setJob(job);
           print('form Saved : $_name and Rate per hour : $_ratePerHour');
           Navigator.of(context).pop();
         }

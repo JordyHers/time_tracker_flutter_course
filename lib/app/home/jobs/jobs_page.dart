@@ -33,7 +33,7 @@ class JobsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO: Temporary code delete me as soon as done
     final database = Provider.of<Database>(context, listen: false);
-    database.JobsStream();
+    database.jobsStream();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,7 +60,7 @@ class JobsPage extends StatelessWidget {
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
     return StreamBuilder<List<Job>>(
-      stream: database.JobsStream(),
+      stream: database.jobsStream(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           ///users represents the list of documents in the collection

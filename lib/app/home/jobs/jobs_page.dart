@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_tracker_flutter_course/app/home/jobs/add_job_page.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
@@ -51,7 +51,7 @@ class JobsPage extends StatelessWidget {
       ),
       body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => AddJobPage.show(context),
+        onPressed: () => EditJobPage.show(context),
         child: Icon(Icons.add),
       ),
     );
@@ -65,8 +65,10 @@ class JobsPage extends StatelessWidget {
         if (snapshot.hasData) {
           ///users represents the list of documents in the collection
           final users = snapshot.data;
-          final children =
-              users.map((job) => JobListTile(job: job, onTap: () {})).toList();
+          final children = users
+              .map((job) => JobListTile(
+                  job: job, onTap: () => EditJobPage.show(context, job: job)))
+              .toList();
           return ListView(children: children);
         }
         if (snapshot.hasError) {

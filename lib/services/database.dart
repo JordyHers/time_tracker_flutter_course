@@ -12,6 +12,11 @@ abstract class Database {
   Stream<List<Job>> JobsStream();
 }
 
+/// This string gets the current time to use it as unique ID. this use
+/// Iso8601String fir a specific format;
+String documentIdFromCurrentDate()=> DateTime.now().toIso8601String();
+
+
 class FirestoreDatabase implements Database {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
   final String uid;
@@ -21,7 +26,7 @@ class FirestoreDatabase implements Database {
 
 
   Future<void> createJob(Job job) =>
-      _service.setData(path: APIPath.job(uid, 'job_abc'), data: job.toMap());
+      _service.setData(path: APIPath.job(uid, documentIdFromCurrentDate()), data: job.toMap());
 
   Stream<List<Job>> JobsStream() => _service.collectionStream(
       path: APIPath.jobs(uid), builder: (data) => Job.fromMap(data));

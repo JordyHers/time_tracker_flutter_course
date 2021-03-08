@@ -1,26 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/add_job_page.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
-import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
 import '../models/job_model.dart';
+import 'jobs_list_tile.dart';
 
 class JobsPage extends StatelessWidget {
-  Future<void> _createJob(BuildContext context) async {
-    try {
-      final database = Provider.of<Database>(context, listen: false);
-      await database.createJob(Job(name: 'Blogging', ratePerHour: 10));
-    } on FirebaseException catch (e) {
-      // if( e.code == 'permission-denied'){}
-      showExceptionAlertDialog(context,
-          title: 'Operation Failed', exception: e);
-    }
-  }
-
   Future<void> _signOut(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
@@ -61,7 +49,7 @@ class JobsPage extends StatelessWidget {
           )
         ],
       ),
-      body:_buildContents(context),
+      body: _buildContents(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () => AddJobPage.show(context),
         child: Icon(Icons.add),
@@ -69,26 +57,25 @@ class JobsPage extends StatelessWidget {
     );
   }
 
-
   Widget _buildContents(BuildContext context) {
-    final database = Provider.of<Database> (context,listen:false);
+    final database = Provider.of<Database>(context, listen: false);
     return StreamBuilder<List<Job>>(
       stream: database.JobsStream(),
-      builder: (context, snapshot){
-        if (snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           ///users represents the list of documents in the collection
           final users = snapshot.data;
-          final children = users.map((user) => Text(user.name)).toList();
-          return ListView( children: children);
+          final children =
+              users.map((job) => JobListTile(job: job, onTap: () {})).toList();
+          return ListView(children: children);
         }
-        if(snapshot.hasError){
-          return Center (child: Text('Some Error Occured'));
+        if (snapshot.hasError) {
+          return Center(child: Text('Some Error Occured'));
         }
-        return Center (child: CircularProgressIndicator(),);
-
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
-
     );
-
   }
 }

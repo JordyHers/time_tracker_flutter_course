@@ -5,7 +5,7 @@ import 'package:time_tracker_flutter_course/app/sign_in/sign_in_page.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
-import 'home/jobs_page.dart';
+import 'home/jobs/jobs_page.dart';
 
 class LandingPage extends StatelessWidget {
   ///In order to pass this value auth declared in the [STATE] for Stateful classes

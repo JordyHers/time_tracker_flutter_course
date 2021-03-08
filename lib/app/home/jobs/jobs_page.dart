@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/add_job_page.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
-import 'models/job_model.dart';
+import '../models/job_model.dart';
 
 class JobsPage extends StatelessWidget {
   Future<void> _createJob(BuildContext context) async {
@@ -62,7 +63,7 @@ class JobsPage extends StatelessWidget {
       ),
       body:_buildContents(context),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _createJob(context),
+        onPressed: () => AddJobPage.show(context),
         child: Icon(Icons.add),
       ),
     );

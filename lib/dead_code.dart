@@ -8,3 +8,23 @@
 //         title: 'Operation Failed', exception: e);
 //   }
 // }
+
+///Used in jobs_page  Widget _buildContents(BuildContext context)
+// if (snapshot.hasData) {
+//   ///jobs represents the list of documents in the collection
+//   final jobs = snapshot.data;
+//
+//   if(jobs.isNotEmpty){
+//   final children = jobs
+//       .map((job) => JobListTile(
+//           job: job, onTap: () => EditJobPage.show(context, job: job)))
+//       .toList();
+//   return ListView(children: children);}
+//   return EmptyContent();
+// }
+// if (snapshot.hasError) {
+//   return Center(child: Text('Some Error Occured'));
+// }
+// return Center(
+//   child: CircularProgressIndicator(),
+// );

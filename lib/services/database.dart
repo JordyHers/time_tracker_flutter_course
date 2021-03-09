@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job_model.dart';
 import 'package:time_tracker_flutter_course/services/api_path.dart';
@@ -9,13 +8,14 @@ abstract class Database {
   //Create a new Job / edit an existing job
   Future<void> setJob(Job job);
 
+  Future<void> deleteJob(Job job);
+
   Stream<List<Job>> jobsStream();
 }
 
 /// This string gets the current time to use it as unique ID. this use
 /// Iso8601String fir a specific format;
-String documentIdFromCurrentDate()=> DateTime.now().toIso8601String();
-
+String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
 class FirestoreDatabase implements Database {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
@@ -23,14 +23,17 @@ class FirestoreDatabase implements Database {
 
   final _service = FirestoreService.instance;
 
+  @override
+  Future<void> deleteJob(Job job) async =>
+      _service.deleteData(path: APIPath.job(uid, job.id));
 
-
+  @override
   Future<void> setJob(Job job) =>
       _service.setData(path: APIPath.job(uid, job.id), data: job.toMap());
 
+
+  @override
   Stream<List<Job>> jobsStream() => _service.collectionStream(
-      path: APIPath.jobs(uid), builder: (data,documentId) => Job.fromMap(data,documentId));
-
-
-
+      path: APIPath.jobs(uid),
+      builder: (data, documentId) => Job.fromMap(data, documentId));
 }

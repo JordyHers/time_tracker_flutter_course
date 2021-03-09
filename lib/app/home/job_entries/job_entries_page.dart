@@ -9,7 +9,7 @@ import 'package:time_tracker_flutter_course/app/home/job_entries/entry_list_item
 import 'package:time_tracker_flutter_course/app/home/job_entries/entry_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_item_builder.dart';
-import 'package:time_tracker_flutter_course/app/home/models/entry.dart';
+import 'package:time_tracker_flutter_course/app/home/models/entry_model.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job_model.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
@@ -53,7 +53,7 @@ class JobEntriesPage extends StatelessWidget {
               'Edit',
               style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
-            onPressed: () => EditJobPage.show(context, job: job),
+            onPressed: () => EditJobPage.show(context, database: database, job: job),
           ),
         ],
       ),

@@ -1,22 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class FirestoreService {
-  ///Here we make this class private so that instance of Firestore service
-  ///can't be created outside this class. So that we can no longer set
-  /// final _service = FirestoreService(); in the [database.dart] But rather
-  /// final _service = FirestoreService.instance;
-  //
-  //
-  ///
-  /// then we declare a singleton as a static
-
   FirestoreService._();
-
   static final instance = FirestoreService._();
-
-  ///----------------------------------------------------------------------
-  /// Generic FUNCTIONS
 
   Future<void> setData({
     @required String path,
@@ -29,32 +16,39 @@ class FirestoreService {
 
   Future<void> deleteData({@required String path}) async {
     final reference = FirebaseFirestore.instance.doc(path);
-    print('delete : $path');
+    print('delete: $path');
     await reference.delete();
   }
 
-  //Here we define a prototype Stream taking a T argument
   Stream<List<T>> collectionStream<T>({
     @required String path,
     @required T Function(Map<String, dynamic> data, String documentId) builder,
+    Query Function(Query query) queryBuilder,
+    int Function(T lhs, T rhs) sort,
   }) {
-    final reference = FirebaseFirestore.instance.collection(path);
+    Query query = FirebaseFirestore.instance.collection(path);
+    if (queryBuilder != null) {
+      query = queryBuilder(query);
+    }
+    final snapshots = query.snapshots();
+    return snapshots.map((snapshot) {
+      final result = snapshot.docs
+          .map((snapshot) => builder(snapshot.data(), snapshot.id))
+          .where((value) => value != null)
+          .toList();
+      if (sort != null) {
+        result.sort(sort);
+      }
+      return result;
+    });
+  }
+
+  Stream<T> documentStream<T>({
+    @required String path,
+    @required T builder(Map<String, dynamic> data, String documentID),
+  }) {
+    final reference = FirebaseFirestore.instance.doc(path);
     final snapshots = reference.snapshots();
-
-    /// Here snapshots returns a stream of documents
-    ///available in the given path.[snapshot is a collection
-    //snapshots.listen((snapshot) {
-
-    /// Here for each document in the collection snapshot
-    /// print their corresponding data [snapshot is a document]
-    // snapshot.docs.forEach((snapshot) => print(snapshot.data()));
-
-    /// Here we map all the documents im the collection
-    return snapshots.map((snapshot) =>
-
-        /// Here we convert a collection snapshot into a list of documents
-        snapshot.docs
-            .map((snapshot) => builder(snapshot.data(), snapshot.id))
-            .toList());
+    return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
   }
 }

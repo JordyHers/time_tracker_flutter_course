@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
-import 'package:time_tracker_flutter_course/app/home/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_item_builder.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
@@ -29,6 +31,21 @@ class JobsPage extends StatelessWidget {
     if (didRequestSignOut == true) {
       _signOut(context);
     }
+  }
+
+  Future <void> _delete(BuildContext context, Job job) async  {
+    try {
+      final database = Provider.of<Database>(context, listen: false);
+      await database.deleteJob(job);
+    } on FirebaseException catch(e){
+      showExceptionAlertDialog(
+        context,
+        title: 'Operation failed',
+        exception: e,
+      );
+
+    }
+
   }
 
   @override
@@ -64,12 +81,29 @@ class JobsPage extends StatelessWidget {
     return StreamBuilder<List<Job>>(
       stream: database.jobsStream(),
       builder: (context, snapshot) {
-    return ListItemsBuilder<Job> (
-      snapshot: snapshot,
-      itemBuilder: (context,job) => JobListTile(
-           job: job, onTap: () => EditJobPage.show(context, job: job)),
-    );
+        return ListItemsBuilder<Job>(
+          snapshot: snapshot,
+          itemBuilder: (context, job) => Dismissible(
+            key: Key('jod-${job.id}'),
+            background: Container(
+              color: Colors.red,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(310.0,12.0,4.0,8.0),
+                child: Text(
+                  'Delete',
+                  style: TextStyle(fontWeight: FontWeight.w300,fontSize: 17),
+                ),
+              ),
+            ),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) => _delete(context, job),
+            child: JobListTile(
+                job: job, onTap: () => EditJobPage.show(context, job: job)),
+          ),
+        );
       },
     );
   }
+
+
 }

@@ -72,7 +72,7 @@ class JobsPage extends StatelessWidget {
               direction: DismissDirection.endToStart,
               onDismissed: (direction) => _delete(context, job),
               child: JobListTile(
-                  job: job, onTap: () => JobEntriesPage.show(context, job)),
+                  job: job, onTap: ()  =>  JobEntriesPage.show(context, job)),
             ),
           );
         },

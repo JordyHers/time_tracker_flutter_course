@@ -19,7 +19,7 @@ class EditJobPage extends StatefulWidget {
   ///
   /// as the result we can get the provider of Database
   static Future<void> show(BuildContext context , {Database database ,Job job} ) async {
-    await Navigator.of(context).push(MaterialPageRoute(
+    await Navigator.of(context,rootNavigator: true).push(MaterialPageRoute(
       builder: (context) => EditJobPage(database: database , job: job),
       fullscreenDialog: true,
     ));

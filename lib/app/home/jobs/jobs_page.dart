@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/job_entries/job_entries_page.dart';
@@ -78,30 +78,30 @@ class JobsPage extends StatelessWidget {
 
   Widget _buildContents(BuildContext context) {
     final database = Provider.of<Database>(context, listen: false);
-    return StreamBuilder<List<Job>>(
-      stream: database.jobsStream(),
-      builder: (context, snapshot) {
-        return ListItemsBuilder<Job>(
-          snapshot: snapshot,
-          itemBuilder: (context, job) => Dismissible(
-            key: Key('jod-${job.id}'),
-            background: Container(
-              color: Colors.red,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(310.0, 12.0, 4.0, 8.0),
-                child: Text(
-                  'Delete',
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 17),
+      return StreamBuilder<List<Job>>(
+        stream: database.jobsStream(),
+        builder: (context, snapshot) {
+          return ListItemsBuilder<Job>(
+            snapshot: snapshot,
+            itemBuilder: (context, job) => Dismissible(
+              key: Key('jod-${job.id}'),
+              background: Container(
+                color: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(310.0, 12.0, 4.0, 8.0),
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(fontWeight: FontWeight.w300, fontSize: 17),
+                  ),
                 ),
               ),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) => _delete(context, job),
+              child: JobListTile(
+                  job: job, onTap: () => JobEntriesPage.show(context, job)),
             ),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) => _delete(context, job),
-            child: JobListTile(
-                job: job, onTap: () => JobEntriesPage.show(context, job)),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
   }
 }

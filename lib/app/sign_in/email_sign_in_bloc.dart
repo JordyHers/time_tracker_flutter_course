@@ -1,23 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_model.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class EmailSignInBloc {
+
   EmailSignInBloc({@required this.auth});
-
   final AuthBase auth;
+  //Behavior is a future that add the value to the stream without using streamController
+  final _modelSubject = BehaviorSubject<EmailSignInModel>.seeded(EmailSignInModel());
 
-  final StreamController<EmailSignInModel> _modelController =
-      StreamController();
+  // final StreamController<EmailSignInModel> _modelController =
+  //     StreamController();
 
-  Stream<EmailSignInModel> get modelStream => _modelController.stream;
+  Stream<EmailSignInModel> get modelStream => _modelSubject.stream;
+ // Stream<EmailSignInModel> get modelStream => _modelController.stream;
+  //EmailSignInModel _model = EmailSignInModel();
 
-  EmailSignInModel _model = EmailSignInModel();
+
+
+  EmailSignInModel get _model =>_modelSubject.value;
+
 
   void dispose() {
-    _modelController.close();
+   // _modelController.close();
+    _modelSubject.close();
   }
 
   /// Submit function is called when the button is pressed
@@ -74,7 +83,7 @@ class EmailSignInBloc {
     bool submitted,
   }) {
     // update model
-    _model = _model.copyWith(
+   _modelSubject.value = _model.copyWith(
         name: name,
         surname: surname,
         email: email,
@@ -84,6 +93,6 @@ class EmailSignInBloc {
         submitted: submitted);
 
     //add updated model to _modelController
-    _modelController.add(_model);
+   // _modelController.add(_model);
   }
 }

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/home/job_entries/entry_list_item.dart';
 import 'package:time_tracker_flutter_course/app/home/job_entries/entry_page.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/edit_job_page.dart';
+import 'package:time_tracker_flutter_course/app/home/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_item_builder.dart';
 import 'package:time_tracker_flutter_course/app/home/models/entry_model.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job_model.dart';
@@ -79,23 +80,28 @@ class JobEntriesPage extends StatelessWidget {
     return StreamBuilder<List<Entry>>(
       stream: database.entriesStream(job: job),
       builder: (context, snapshot) {
-        return ListItemsBuilder<Entry>(
-          snapshot: snapshot,
-          itemBuilder: (context, entry) {
-            return DismissibleEntryListItem(
-              key: Key('entry-${entry.id}'),
-              entry: entry,
-              job: job,
-              onDismissed: () => _deleteEntry(context, entry),
-              onTap: () => EntryPage.show(
-                context: context,
-                database: database,
-                job: job,
-                entry: entry,
-              ),
-            );
-          },
-        );
+     final data = snapshot.data;
+
+
+       return ListItemsBuilder<Entry>(
+         snapshot: snapshot,
+         itemBuilder: (context, entry) {
+           return DismissibleEntryListItem(
+             key: Key('entry-${entry.id}'),
+             entry: entry,
+             job: job,
+             onDismissed: () => _deleteEntry(context, entry),
+             onTap: () => EntryPage.show(
+               context: context,
+               database: database,
+               job: job,
+               entry: entry,
+             ),
+           );
+         },
+       );
+
+
       },
     );
   }

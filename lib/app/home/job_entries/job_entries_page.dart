@@ -22,7 +22,7 @@ class JobEntriesPage extends StatelessWidget {
 
   static Future<void> show(BuildContext context, Job job) async {
     final database = Provider.of<Database>(context, listen: false);
-    await Navigator.of(context).push(
+    await  Navigator.of(context).push(
       CupertinoPageRoute(
         fullscreenDialog: false,
         builder: (context) => JobEntriesPage(database: database, job: job),
@@ -80,27 +80,25 @@ class JobEntriesPage extends StatelessWidget {
     return StreamBuilder<List<Entry>>(
       stream: database.entriesStream(job: job),
       builder: (context, snapshot) {
-     final data = snapshot.data;
-
-
        return ListItemsBuilder<Entry>(
          snapshot: snapshot,
          itemBuilder: (context, entry) {
-           return DismissibleEntryListItem(
-             key: Key('entry-${entry.id}'),
-             entry: entry,
-             job: job,
-             onDismissed: () => _deleteEntry(context, entry),
-             onTap: () => EntryPage.show(
-               context: context,
-               database: database,
-               job: job,
+           if(snapshot.hasData){
+             return DismissibleEntryListItem(
+               key: Key('entry-${entry.id}'),
                entry: entry,
-             ),
-           );
+               job: job,
+               onDismissed: () => _deleteEntry(context, entry),
+               onTap: () => EntryPage.show(
+                 context: context,
+                 database: database,
+                 job: job,
+                 entry: entry,
+               ),
+             );
+           } return EmptyContent();
          },
        );
-
 
       },
     );

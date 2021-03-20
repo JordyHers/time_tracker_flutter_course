@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,9 @@ import 'package:time_tracker_flutter_course/services/auth.dart';
 
 
 class EmailSignInFormStateful extends StatefulWidget with EmailAndPasswordValidators {
+   EmailSignInFormStateful({Key key, this.onSignedIn}) : super(key: key);
+
+  final VoidCallback onSignedIn;
 
   @override
   _EmailSignInFormStatefulState createState() => _EmailSignInFormStatefulState();
@@ -80,7 +85,10 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
         await auth
             .signUpUserWithEmailAndPassword(_email, _password, _name, _surname);
       }
-      Navigator.of(context).pop();
+      if(widget.onSignedIn != null){
+        widget.onSignedIn();
+      }
+      //Navigator.of(context).pop();
     } on FirebaseAuthException catch  (e) {
           showExceptionAlertDialog(context, title: widget.signInFailedText,
           exception: e);
@@ -121,9 +129,9 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
   List<Widget> _buildChildren() {
     final primaryText = _formType == EmailSignInFormType.signIn
         ? 'Sign in'
-        : ' Create an account ';
+        : 'Create an account';
     final secondaryText = _formType == EmailSignInFormType.signIn
-        ? ' Need an account ? Register'
+        ? 'Need an account ? Register'
         : 'Have an account? Sign in';
 
     bool submitSignInEnabled = widget.emailValidator.isValid(_email) &&
@@ -143,6 +151,7 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
     return [
       _formType == EmailSignInFormType.register
           ? TextField(
+        key: Key('name'),
           focusNode: _nameFocusNode,
           controller: _nameController,
           textInputAction: TextInputAction.next,
@@ -160,6 +169,7 @@ class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful>  {
           : Opacity(opacity: 0),
       _formType == EmailSignInFormType.register
           ? TextField(
+        key: Key('surname'),
           focusNode: _surnameFocusNode,
           controller: _surnameController,
           textInputAction: TextInputAction.next,

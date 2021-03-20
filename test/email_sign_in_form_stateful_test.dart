@@ -32,23 +32,72 @@ void main() {
     ));
   }
 
-  testWidgets(
-      " When user doesn't enter the email and password "
-      "And user taps on the sign-in button"
-      "Then signInWithEmailAndPassword is not called",
-      (WidgetTester tester) async {
-        await pumpEmailSignInForm(tester);
+  group('sign in', () {
+    testWidgets(
+        " When user doesn't enter the email and password "
+        "And user taps on the sign-in button"
+        "Then signInWithEmailAndPassword is not called",
+        (WidgetTester tester) async {
+      await pumpEmailSignInForm(tester);
 
-        /// Then we need to simulate a tap action , but first we need to find it
-        ///
-        final signInButton = find.text('Sign in');
-        await tester.tap(signInButton);
+      /// Then we need to simulate a tap action , but first we need to find it
+      ///
+      final signInButton = find.text('Sign in');
+      await tester.tap(signInButton);
 
-        /// we use verify instead of expect.
-        /// expects : asserts actual value vs matcher
-        /// verify: check id method is called on a mock
-        /// Sometime we can call expect and verify
+      /// we use verifyNever instead of expect.
+      /// expects : asserts actual value vs matcher
+      /// verify: check id method is called on a mock
+      /// Sometime we can call expect and verify
 
-        verifyNever(mockAuth.signInWithEmailAndPassword(any,any));
-      });
+      verifyNever(mockAuth.signInWithEmailAndPassword(any, any));
+    });
+
+
+    testWidgets(
+        " When user  Enters the email and password "
+        "And user taps on the sign-in button"
+        "Then signInWithEmailAndPassword is not called",
+        (WidgetTester tester) async {
+      await pumpEmailSignInForm(tester);
+     const email = 'email@email.com';
+     const password = '111111';
+
+     /// ---------------------------------------
+      ///Here the widget key is used to find a specific widget
+      ///by referring the key given to it.
+     final emailField = find.byKey(Key('email'));
+     //here we expect to find the widget
+     expect(emailField, findsOneWidget);
+     await tester.enterText(emailField, email);
+
+
+     ///-----------------------------------------
+      ///
+      final passwordField = find.byKey(Key('password'));
+      //here we expect to find the widget
+      expect(passwordField, findsOneWidget);
+      await tester.enterText(passwordField, password);
+
+      ///When we build test widgets are not automatically rebuild
+      ///so we need to call it manually for animation we use pumpAndSettle
+      await tester.pump();
+
+
+
+      /// Then we need to simulate a tap action , but first we need to find it
+      ///
+      final signInButton = find.text('Sign in');
+      await tester.tap(signInButton);
+
+      /// we use verify instead of expect.
+      /// expects : asserts actual value vs matcher
+      /// verify: check id method is called on a mock
+      /// Sometime we can call expect and verify
+
+
+      ///  .called(1) states the number of time the method is called
+      verify(mockAuth.signInWithEmailAndPassword(email, password)).called(1);
+    });
+  });
 }

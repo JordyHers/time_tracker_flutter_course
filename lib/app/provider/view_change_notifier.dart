@@ -17,9 +17,7 @@ class ViewChangeNotifier extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Spacer(
-              flex: 1,
-            ),
+          SizedBox(height: 20,),
             Text(
               'List of products',
               style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),

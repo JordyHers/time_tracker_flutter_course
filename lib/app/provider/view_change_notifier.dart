@@ -10,7 +10,7 @@ class ViewChangeNotifier extends StatelessWidget {
     final auth = Provider.of<AuthBase>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(auth.currentUser.displayName),
+        title: Text(auth.currentUser.displayName ?? 'No name') ,
       ),
       body: Consumer<UserProvider>(
         builder: (context, user, child) => Column(

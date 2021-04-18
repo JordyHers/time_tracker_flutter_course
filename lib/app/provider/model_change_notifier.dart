@@ -13,6 +13,7 @@ class UserProvider with ChangeNotifier{
    Future<void> addModel(ProductsModel model){
      _products.add(model);
      notifyListeners();
+
    }
 
    List<ProductsModel> get products => _products;

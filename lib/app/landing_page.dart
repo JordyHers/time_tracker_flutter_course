@@ -8,9 +8,11 @@ import 'package:time_tracker_flutter_course/app/sign_in/sign_in_page.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
 
-import 'home/jobs/jobs_page.dart';
 
 class LandingPage extends StatelessWidget {
+  final Database Function (String) databaseBuilder;
+
+  const LandingPage({Key key, @required this.databaseBuilder}) : super(key: key);
   ///In order to pass this value auth declared in the [STATE] for Stateful classes
   ///to the actual LandingPage widget
   ///we need to use the key word [widget.auth]
@@ -32,7 +34,7 @@ class LandingPage extends StatelessWidget {
             /// Here we have added a provider [Database] as a parent of the Jobs
             /// Page
             return Provider<Database>(
-              create: (_) => FirestoreDatabase(uid: user.uid),
+              create: (_) => databaseBuilder(user.uid),
              child: ChangeNotifierProvider(
                create: (_)=> UserProvider(),
                  //child: ViewChangeNotifier()),

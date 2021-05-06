@@ -5,13 +5,8 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/email_sign_in_form_stateful.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
+import 'mocks.dart';
 
-///we don't want to use the real firebase authentication multiple times
-///so we create a mock sign-in class. Mock is taken from the Mokito package
-
-class MockAuth extends Mock implements AuthBase {}
-
-class MockUser extends Mock implements User {}
 
 void main() {
   MockAuth mockAuth;

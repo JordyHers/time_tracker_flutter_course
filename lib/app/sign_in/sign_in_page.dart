@@ -10,26 +10,31 @@ import 'package:time_tracker_flutter_course/common_widgets/show_exeption_alert.d
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({Key key,@required this.manager,@required this.isLoading}) : super(key: key);
+  const SignInPage({Key key, @required this.manager, @required this.isLoading})
+      : super(key: key);
   final SignInManager manager;
   final bool isLoading;
+  static const Key emailpasswordKey = Key('email-password');
 
   ///Here we had the provider wrapping the Sign in Page
   static Widget create(BuildContext context) {
-    final auth  = Provider.of<AuthBase>(context,listen: false);
+    final auth = Provider.of<AuthBase>(context, listen: false);
     return ChangeNotifierProvider<ValueNotifier<bool>>(
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer <ValueNotifier<bool>>(
-        builder: (_,isLoading,__)=> Provider<SignInManager>(
-          create: (_) => SignInManager(auth: auth ,isLoading: isLoading),
-          child: Consumer<SignInManager>(
-            builder: (_,manager,__)=> SignInPage(manager: manager, isLoading: isLoading.value,) ,
-          ),
-        ),
+        builder: (_, isLoading, __) =>
+            Provider<SignInManager>(
+              create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+              child: Consumer<SignInManager>(
+                builder: (_, manager, __) =>
+                    SignInPage(manager: manager, isLoading: isLoading.value,),
+              ),
+            ),
       ),
     );
   }
-///----------------------------------------------------------------------
+
+  ///----------------------------------------------------------------------
   void _showSignInError(BuildContext context, Exception exception) {
     if (exception is FirebaseAuthException &&
         exception.code == 'ERROR_ABORTED_BY_USER') {
@@ -77,7 +82,6 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -85,7 +89,7 @@ class SignInPage extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
       ),
-      body:  _buildContent(context),
+      body: _buildContent(context),
 
     );
   }
@@ -116,6 +120,7 @@ class SignInPage extends StatelessWidget {
           ),
           SizedBox(height: 8.0),
           SignInButton(
+            key:  emailpasswordKey,
             text: 'Sign in With email',
             textColor: Colors.white,
             color: Colors.teal[700],

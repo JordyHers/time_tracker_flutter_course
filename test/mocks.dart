@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mockito/mockito.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/database.dart';
@@ -14,7 +15,7 @@ class MockUser extends Mock implements User {
   factory MockUser.uid(String uid){
     final user = MockUser();
     when(user.uid).thenReturn(uid);
-
     return user;
   }
 }
+class MockNavigatorObvserver extends Mock implements NavigatorObserver{}

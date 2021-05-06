@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,7 +33,7 @@ void main() {
 
   /// Always create widgets with all the ancestors that are needed
   /// here we have to use MaterialApp
-  Future<void> pumpELandingPage(WidgetTester tester,
+  Future<void> pumpLandingPage(WidgetTester tester,
       {VoidCallback onSignedIn}) async {
     await tester.pumpWidget(Provider<AuthBase>(
       create: (_) => mockAuth,
@@ -42,4 +44,15 @@ void main() {
       ),
     ));
   }
+
+  
+  testWidgets('stream waiting',  (WidgetTester tester) async {
+    stubOnAuthStateChangesYields([]);
+    await pumpLandingPage(tester);
+
+
+  expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  
+  });
+
 }

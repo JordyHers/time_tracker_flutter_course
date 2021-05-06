@@ -35,8 +35,8 @@ class LandingPage extends StatelessWidget {
               create: (_) => FirestoreDatabase(uid: user.uid),
              child: ChangeNotifierProvider(
                create: (_)=> UserProvider(),
-                 child: ViewChangeNotifier()),
-             // child: HomePage(),
+                 //child: ViewChangeNotifier()),
+              child: HomePage()),
             );
           }
           return Scaffold(

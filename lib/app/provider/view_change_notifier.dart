@@ -14,6 +14,7 @@ class ViewChangeNotifier extends StatelessWidget {
       ),
       body: Consumer<UserProvider>(
         builder: (context, user, child) => Column(
+
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

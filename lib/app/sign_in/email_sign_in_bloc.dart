@@ -19,10 +19,7 @@ class EmailSignInBloc {
  // Stream<EmailSignInModel> get modelStream => _modelController.stream;
   //EmailSignInModel _model = EmailSignInModel();
 
-
-
   EmailSignInModel get _model =>_modelSubject.value;
-
 
   void dispose() {
    // _modelController.close();

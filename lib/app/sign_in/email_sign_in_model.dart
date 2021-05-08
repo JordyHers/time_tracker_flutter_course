@@ -1,17 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 
 /// This enum takes care of the different states of the sign in form
 enum EmailSignInFormType { signIn, register }
 
 class EmailSignInModel with EmailAndPasswordValidators {
-  EmailSignInModel(
-      {this.name = '',
-      this.surname = '',
-      this.email = '',
-      this.password = '',
-      this.formType = EmailSignInFormType.signIn,
-      this.isLoading = false,
-      this.submitted = false});
+  EmailSignInModel({this.name = '',
+    this.surname = '',
+    this.email = '',
+    this.password = '',
+    this.formType = EmailSignInFormType.signIn,
+    this.isLoading = false,
+    this.submitted = false});
 
   String get primaryButtonText {
     return formType == EmailSignInFormType.signIn
@@ -46,6 +46,7 @@ class EmailSignInModel with EmailAndPasswordValidators {
   bool get showErrorTextSurname {
     return submitted && !surnameValidator.isValid(surname) && !isLoading;
   }
+
   bool get showErrorTextEmail {
     return submitted && !emailValidator.isValid(email);
   }
@@ -61,6 +62,29 @@ class EmailSignInModel with EmailAndPasswordValidators {
   final EmailSignInFormType formType;
   final bool isLoading;
   final bool submitted;
+
+
+  @override
+  int get hashCode =>
+      hashValues(
+          name,
+          surname,
+          email,
+          password,
+          formType,
+          isLoading,
+          submitted);
+  @override
+  bool operator ==(other) {
+    if (identical(this, other)) return true;
+    if (runtimeType != other.runtimeType) return false;
+    final EmailSignInModel otherModel = other;
+    return email == otherModel.email &&
+        password == otherModel.password &&
+        formType == otherModel.formType &&
+        isLoading == otherModel.isLoading &&
+        submitted == otherModel.submitted;
+  }
 
   EmailSignInModel copyWith({
     String name,
@@ -81,5 +105,9 @@ class EmailSignInModel with EmailAndPasswordValidators {
       submitted: submitted ?? this.submitted,
     );
   }
+
+  @override
+  String toString() =>
+      'name: $name, surname: $surname, email: $email, password: $password, formType: $formType, isLoading: $isLoading, submitted: $submitted';
 // model.copyWith(email:email)
 }

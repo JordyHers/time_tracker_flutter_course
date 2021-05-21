@@ -29,7 +29,6 @@ class FirestoreService {
     Query query = FirebaseFirestore.instance.collection(path);
     if (queryBuilder != null) {
       query = queryBuilder(query);
-
     }
     final snapshots = query.snapshots();
     return snapshots.map((snapshot) {

@@ -22,14 +22,6 @@
           }
         },
         {
-          "client_id": "390240542536-bqk77dovaljs3k1u1du618h16268o239.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hershel.time_tracker_flutter_course",
-            "certificate_hash": "f397cf064cbfc1cc234a79c0cffe2ffee4b08ff5"
-          }
-        },
-        {
           "client_id": "390240542536-moobgv7iegti5vevjdma90pi7lmc9ol4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -45,13 +37,6 @@
             {
               "client_id": "390240542536-moobgv7iegti5vevjdma90pi7lmc9ol4.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "390240542536-38iaqmjccvbljb8f4vo58b01kmv909v9.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.hershel.timeTrackerFlutterCourse"
-              }
             }
           ]
         }

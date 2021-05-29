@@ -6,6 +6,7 @@ void main(){
   /// This syntax is used to test widgets
   ///
   /// we use it to build and interact in a test environment
+  ///
   testWidgets('onPressed callback', (WidgetTester tester) async {
   var pressed  = false;
 
